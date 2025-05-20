@@ -2,7 +2,7 @@ Python High performance Computing
 =================================
 A collection of code examples about parallel and high performance computing with Python. The noteboks in this repository are based on the books:
 
-* [Gorelick, Ozsvald - High Performance Python, 2nd Ed.](https://www.oreilly.com/library/view/high-performance-python/9781492055013/).
+* [Gorelick, Ozsvald - High Performance Python, 2nd Ed.](https://github.com/mynameisfiber/high_performance_python_2e).
 
 ## 1. Performant Python
 A computing unit is made of a CPU connected to a RAM memory unit and a HD for data storage. A CPU comes with its own very fast memory units, or caches, named L1, L2. A CPU is characterized by
