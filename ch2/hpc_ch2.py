@@ -16,7 +16,7 @@
 #
 # $ python kernprof -l -v julia1_lineprofiler.py
 #
-python -m cProfile -o profile.stats hpc_ch2.py
+# python -m cProfile -o profile.stats hpc_ch2.py
 import math
 from PIL import Image
 import array
