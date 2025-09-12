@@ -7,11 +7,16 @@
 #
 # python -m cProfile -s cumulative hpc_ch6.py > log.txt
 #
-# The output with the profiler informtation will be redirected to a text file.
+# The output with the profiler information will be redirected to a text file.
 # We can also use a cprofile format for the statistics
 #
 # $ python -m cProfile -o profile.stats hpc_ch6.py
 #
+# We can use the LineProfiler to inspect the performance for each line of the source code
+# We have to add a tag to the functions we want to assess and execute the script with the 
+# kernprof command
+# 
+# $ kernprof -l -v hpc_ch6.py
 
 import time
 import cProfile
