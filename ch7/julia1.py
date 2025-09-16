@@ -1,7 +1,7 @@
 # This script creates a Julia set in a subset of the complex plane. It is copied from the script
 # hpc_ch2.py in the ch2 folder The script can be run using the command
 #
-# $ python hpc_ch2.py 
+# $ python julia1.py 
 #
 # Before running the script we have to trasform into C and compile the calculate_z_serial_purepython()
 # that is defined in the cythonfn.pyx file. The function is used to filter the z values inside the area 
