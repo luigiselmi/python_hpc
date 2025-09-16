@@ -59,6 +59,11 @@ def show_greyscale(output_raw, width, height, max_iterations):
     im.show()
 
 def z_points(x1, x2, y1, y2, desired_width):
+    '''
+    This function creates a list of points in the complex plane, and list of constant complex numbers, 
+    that lie within the region defined by (x1, x2, y1, y2), to form a grid of points where the function 
+    that defines the Julias set, will be computed.
+    '''
     x_step = (x2 - x1) / desired_width
     y_step = (y1 - y2) / desired_width
     x = []
@@ -101,7 +106,9 @@ def timefn(fn):
 
 @timefn
 def calculate_z_serial_purepython(maxiter, zs, cs):
-    """Calculate output list using Julia update rule"""
+    '''
+    Calculate output list using Julia update rule
+    '''
     output = [0] * len(zs) # list of zeros
     for i in range(len(zs)):
         n = 0
@@ -130,17 +137,17 @@ def calc_pure_python(zs, cs, width, height, draw_output, desired_width, max_iter
 #--------------------------------------------------------------------------------------------------
 #                                             Application 
 #--------------------------------------------------------------------------------------------------
-# area of complex space to investigate
-x1, x2, y1, y2 = -1.8, 1.8, -1.8, 1.8
-desired_width=1000
-c_real, c_imag = -0.62772, -.42193
-
-zs, cs, width, height = z_points(x1, x2, y1, y2, desired_width)
-print("Total elements:", len(zs))
 
 if __name__ == "__main__":
-    # Calculate the Julia set using a pure Python solution with
-    # reasonable defaults for a laptop
-    # set draw_output to True to use PIL to draw an image
+    '''
+    Calculate the Julia set using a pure Python solution with
+    reasonable defaults for a laptop. Set draw_output to True 
+    to draw an image area of complex space to investigate.
+    '''
+    x1, x2, y1, y2 = -1.8, 1.8, -1.8, 1.8
+    desired_width=1000
+    c_real, c_imag = -0.62772, -.42193
+    zs, cs, width, height = z_points(x1, x2, y1, y2, desired_width)
+    print("Total elements:", len(zs))
     calc_pure_python(zs, cs, width, height, draw_output=True, desired_width=1000, max_iterations=300)
 
