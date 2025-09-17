@@ -1,3 +1,25 @@
+# This script implements an http server. A client can send a request using the argument
+# name and delay. The connection is synchronous and will last for the delay time send in
+# the request. the server can be started with the command
+#
+# $ python server.py
+#
+# The server will listen on port 8080 of localhost (127.0.0.1). The server can be shut down
+# by killing its process using its process id. We first look for the id of the process listening
+# on port 8080
+#
+# $ netstat -ano | findstr :8080
+#
+# The response will be something similar to 
+#
+# TCP    0.0.0.0:8080           0.0.0.0:0              LISTENING       2068
+# TCP    [::]:8080              [::]:0                 LISTENING       2068
+#
+# Here the pid is 2068 so we kill the process with this id
+#
+# $ taskkill /PID 2068 /F
+#
+
 import json
 import time
 from collections import defaultdict
