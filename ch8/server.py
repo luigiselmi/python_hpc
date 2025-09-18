@@ -24,6 +24,8 @@ import json
 import time
 from collections import defaultdict
 from tornado import gen, httpserver, ioloop, options, web
+import os
+import threading
 
 options.define("port", default=8080, help="Port to serve on")
 
@@ -49,7 +51,12 @@ class AddMetric(web.RequestHandler):
             self.metric_data[name].append(
                 {"start": start, "end": end, "dt": end - start}
             )
-
+def threads_info():
+    total_threads = threading.active_count()
+    thread_name = threading.current_thread().name
+    print(f'Python process running with process id: {os.getpid()}')
+    print(f'Python is currently running {total_threads} thread(s)')
+    print(f'The current thread is {thread_name}')
 
 if __name__ == "__main__":
     options.parse_command_line()
@@ -59,5 +66,6 @@ if __name__ == "__main__":
 
     http_server = httpserver.HTTPServer(application)
     http_server.listen(port)
+    threads_info()
     print(("Listening on port: {}".format(port)))
     ioloop.IOLoop.instance().start()

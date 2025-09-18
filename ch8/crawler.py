@@ -1,11 +1,21 @@
-# This script implements an http client. It is used to send requests to an http server
-# listening on port 8080 of the local host. Each request will send two keys: name and delay.
-# the first key is a string and the second key is a number that will tell the server how long
-# it should keep the synchronous connection before returning the control to the client. The 
-# client will wait for the connection to be closed before sending a new request.
+# This script implements a single-threaded http client. It is used to send requests to an 
+# http server listening on port 8080 of the local host. Each request will send two keys: 
+# name and delay. the first key is a string and the second key is a number that will tell 
+# the server how long it should keep the synchronous connection before returning the control 
+# to the client. The client will wait for the connection to be closed before sending a new 
+# request.
+import os
+import threading
 import random
 import string
 import requests
+
+def threads_info():
+    total_threads = threading.active_count()
+    thread_name = threading.current_thread().name
+    print(f'Python process running with process id: {os.getpid()}')
+    print(f'Python is currently running {total_threads} thread(s)')
+    print(f'The current thread is {thread_name}')
 
 def generate_urls(base_url, num_urls):
     '''
@@ -25,7 +35,7 @@ def run_experiment(base_url, num_iter=1000):
 
 if __name__ == "__main__":
     import time
-
+    threads_info()
     delay = 100
     num_iter = 100
     base_url = f'http://127.0.0.1:8080/add?name=serial&delay={delay}&'
