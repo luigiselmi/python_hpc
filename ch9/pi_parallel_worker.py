@@ -12,7 +12,8 @@
 #
 # $ python pi_parallel_worker.py 4
 #
-# The default settings uses Threads as workers. In order to use processes we have to use
+# The default settings uses Threads as workers. In this case only one CPU core is used with 4
+# threads. In order to use the other CPU cores with processes we have to use
 #
 # $ python pi_parallel_worker.py --processes 4
 #
@@ -20,12 +21,26 @@
 #
 #  $ python pi_parallel_worker.py --processes --nbr_samples_in_total 100000 4
 #
+import os
+import random
 import time
 import argparse
 import numpy as np
 import multiprocessing
 
-def estimate_nbr_points_in_quarter_circle(nbr_samples):
+def estimate_nbr_points_in_quarter_circle_python(nbr_estimates):
+    """Monte carlo estimate of the number of points in a quarter circle using pure Python"""
+    print(f"Executing estimate_nbr_points_in_quarter_circle with {nbr_estimates:,} on pid {os.getpid()}")
+    nbr_trials_in_quarter_unit_circle = 0
+    for step in range(int(nbr_estimates)):
+        x = random.uniform(0, 1)
+        y = random.uniform(0, 1)
+        is_in_unit_circle = x * x + y * y <= 1.0
+        nbr_trials_in_quarter_unit_circle += is_in_unit_circle
+
+    return nbr_trials_in_quarter_unit_circle
+
+def estimate_nbr_points_in_quarter_circle_numpy(nbr_samples):
     """Estimate Pi using vectorised numpy arrays"""
     np.random.seed() # remember to set the seed per process
     xs = np.random.uniform(0, 1, nbr_samples)
@@ -63,7 +78,7 @@ if __name__ == "__main__":
     nbr_samples_per_worker == int(nbr_samples_per_worker)
     map_inputs = [nbr_samples_per_worker] * nbr_parallel_blocks
     t1 = time.time()
-    results = pool.map(estimate_nbr_points_in_quarter_circle, map_inputs)
+    results = pool.map(estimate_nbr_points_in_quarter_circle_python, map_inputs)
     pool.close()
     exec_time = time.time() - t1
     print("Dart throws in unit circle per worker:", results)
