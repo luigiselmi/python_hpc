@@ -8,9 +8,12 @@
 # are called workers since they are responsible for a share of the calculations. 
 # The number of cores to be used must be provided when executing the script, e.g. 4.
 # The multiprocessing module creates a pool of worker and send the function to be executed 
-# and its argument to each worker.
+# and its argument to each worker. Two algorithms are available for the computation of the 
+# number of points that fall in the quarter circle: one based on Python and one based on NumPy.
+# The default algorithm is based on Python. The two algorithms can be compared to see the 
+# the difference in performances.
 #
-# $ python pi_parallel_worker.py 4
+# $ python pi_parallel_worker.py --algorithm numpy 4
 #
 # The default settings uses Threads as workers. In this case only one CPU core is used with 4
 # threads. In order to use the other CPU cores with processes we have to use
@@ -42,7 +45,8 @@ def estimate_nbr_points_in_quarter_circle_python(nbr_estimates):
 
 def estimate_nbr_points_in_quarter_circle_numpy(nbr_samples):
     """Estimate Pi using vectorised numpy arrays"""
-    np.random.seed() # remember to set the seed per process
+    print(f"Executing estimate_nbr_points_in_quarter_circle with {nbr_samples:,} on pid {os.getpid()}")
+    np.random.seed(1) # remember to set the seed per process
     xs = np.random.uniform(0, 1, nbr_samples)
     ys = np.random.uniform(0, 1, nbr_samples)
     estimate_inside_quarter_unit_circle = (xs * xs + ys * ys) <= 1
@@ -54,7 +58,7 @@ if __name__ == "__main__":
     parser.add_argument('nbr_workers', type=int, help='Number of workers e.g. 1, 2, 4, 8')
     parser.add_argument('--nbr_samples_in_total', type=int, default=1e8, help='Number of samples in total e.g. 100000000')
     parser.add_argument('--processes', action="store_true", default=False, help='True if using Processes, absent (False) for Threads')
-
+    parser.add_argument('--algorithm', type=str, default='python', help='Algorithm using Python or NumPy')
     print('Number of cores: ', multiprocessing.cpu_count())
 
     args = parser.parse_args()
@@ -76,9 +80,14 @@ if __name__ == "__main__":
     # confirm we have an integer number of jobs to distribute
     assert nbr_samples_per_worker == int(nbr_samples_per_worker)
     nbr_samples_per_worker == int(nbr_samples_per_worker)
+    algorithm = args.algorithm
+    print('Algorithm: {}'.format(algorithm))
     map_inputs = [nbr_samples_per_worker] * nbr_parallel_blocks
     t1 = time.time()
-    results = pool.map(estimate_nbr_points_in_quarter_circle_python, map_inputs)
+    if (algorithm=='numpy'):
+        results = pool.map(estimate_nbr_points_in_quarter_circle_numpy, map_inputs)
+    else:
+        results = pool.map(estimate_nbr_points_in_quarter_circle_python, map_inputs)
     pool.close()
     exec_time = time.time() - t1
     print("Dart throws in unit circle per worker:", results)
